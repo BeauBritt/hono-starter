@@ -5,15 +5,14 @@
     "deploy": "vercel"
   },
   "dependencies": {
-  "hono": "^4.7.6",
-  "@hono/zod-validator": "^0.4.3",
-  "mongodb": "^6.15.0",
-  "dotenv": "^16.5.0",
-  "bcryptjs": "^3.0.2"
-}
-
+    "hono": "^4.7.6",
+    "@hono/zod-validator": "^0.4.3",
+    "mongodb": "^6.15.0",
+    "dotenv": "^16.5.0",
+    "bcryptjs": "^3.0.2"
   },
   "devDependencies": {
     "vercel": "^32.4.1"
   }
 }
+
