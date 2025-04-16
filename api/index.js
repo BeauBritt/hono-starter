@@ -11,7 +11,7 @@ const app = new Hono()
 
 app.use('*', cors({ origin: '*', credentials: true }))
 
-const mongoUrl = process.env.URL
+const mongoUrl = process.env.url
 const client = new MongoClient(mongoUrl)
 const db = client.db('CBPacks')
 const playerCollection = db.collection('Player Data')
