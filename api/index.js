@@ -1,16 +1,35 @@
+// src/index.js
 import { Hono } from 'hono'
-import { handle } from 'hono/vercel'
+import { cors } from 'hono/cors'
+import { MongoClient } from 'mongodb'
+import { config } from 'dotenv'
+import { userRoutes } from './userRoutes.js'
 
-const app = new Hono().basePath('/api')
+config()
 
-app.get('/', (c) => {
-  return c.json({ message: "Congrats! You've deployed Hono to Vercel" })
+const app = new Hono()
+
+app.use('*', cors({ origin: '*', credentials: true }))
+
+const mongoUrl = process.env.URL
+const client = new MongoClient(mongoUrl)
+const db = client.db('CBPacks')
+const playerCollection = db.collection('Player Data')
+
+// Register user routes
+app.route('/user', userRoutes)
+
+// Base route
+app.get('/', async (c) => {
+  const players = await playerCollection.find({}, { projection: { _id: 0 } }).toArray()
+  return c.json(players)
 })
 
-const handler = handle(app);
+// Get 5 random players
+app.get('/random_players', async (c) => {
+  const players = await playerCollection.find({}, { projection: { _id: 0 } }).toArray()
+  const shuffled = players.sort(() => 0.5 - Math.random())
+  return c.json(shuffled.slice(0, 5))
+})
 
-export const GET = handler;
-export const POST = handler;
-export const PATCH = handler;
-export const PUT = handler;
-export const OPTIONS = handler;
+export default app
